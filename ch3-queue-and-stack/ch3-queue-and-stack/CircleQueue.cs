@@ -44,13 +44,31 @@ namespace ch3_queue_and_stack
         public void Dequeue()
         {
             var nextFront = (Front + 1) % Length;
-            if (nextFront > Rear)
+            if (Front == -1)
             {
                 Console.WriteLine("queue is empty, nothing to delete !!");
                 return;
             }
+            else if (Front == Rear)
+            {
+                Items[Front] = default;
+                Front = -1;
+                Rear = -1;
+                return;
+            }
+
             Items[Front] = default;
             Front = nextFront;
+        }
+
+        public void printCircleQueue()
+        {
+            Console.WriteLine($@"current front：{Front}");
+            Console.WriteLine($@"current rear：{Rear}");
+            foreach (var item in Items)
+            {
+                Console.WriteLine(item.ToString());
+            }
         }
     }
 }
