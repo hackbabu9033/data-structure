@@ -10,6 +10,8 @@ namespace ch3_queue_and_stack
         private int Front { set; get; }
         private int Rear { set; get; }
 
+        private bool Isempty { set; get; }
+
         private T[] Items { set; get; }
         public CircleQueue(int length)
         {
@@ -22,14 +24,6 @@ namespace ch3_queue_and_stack
         public void Enqueue(T item)
         {
             var nextRear = (Rear + 1) % Length;
-
-            if (Front == -1)
-            {
-                Front = 0;
-                Items[nextRear] = item;
-                Rear = nextRear;
-                return;
-            }
          
             if (Front == nextRear)
             {
@@ -44,16 +38,11 @@ namespace ch3_queue_and_stack
         public void Dequeue()
         {
             var nextFront = (Front + 1) % Length;
-            if (Front == -1)
+
+            if (Front == Rear && !Isempty)
             {
-                Console.WriteLine("queue is empty, nothing to delete !!");
-                return;
-            }
-            else if (Front == Rear)
-            {
+                Isempty = !Isempty;
                 Items[Front] = default;
-                Front = -1;
-                Rear = -1;
                 return;
             }
 
@@ -61,7 +50,7 @@ namespace ch3_queue_and_stack
             Front = nextFront;
         }
 
-        public void printCircleQueue()
+        public void PrintCircleQueue()
         {
             Console.WriteLine($@"current front：{Front}");
             Console.WriteLine($@"current rear：{Rear}");

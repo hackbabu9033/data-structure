@@ -14,7 +14,7 @@ namespace ch3_queue_and_stack
             intCircleQueue.Dequeue();
             intCircleQueue.Dequeue();
             intCircleQueue.Dequeue();
-            intCircleQueue.printCircleQueue();
+            intCircleQueue.PrintCircleQueue();
         }
     }
 }
