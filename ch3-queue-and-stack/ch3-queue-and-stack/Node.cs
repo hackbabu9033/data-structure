@@ -235,9 +235,25 @@ namespace ch3_queue_and_stack
         public Node<int> Insert(int item)
         {
             Data.Add(item);
-            ReHeapify(Data);
+            var heapedResult = ReHeapify(Data);
+            // reheap list after add a new object
+            Data = heapedResult;
+            // get reheaped binaryTree
             Tree = BinaryTree<int>.CreateBinaryTree(Data);
             return Tree;
         }
+
+        //public Node<int> Delete(int item)
+        //{
+        //    Data.Add(item);
+        //    var heapedResult = ReHeapify(Data);
+        //    // reheap list after add a new object
+        //    Data = heapedResult;
+        //    // get reheaped binaryTree
+        //    Tree = BinaryTree<int>.CreateBinaryTree(Data);
+        //    return Tree;
+        //}
+
+
     }
 }
