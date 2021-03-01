@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace ch3_queue_and_stack
@@ -214,20 +215,23 @@ namespace ch3_queue_and_stack
 
         public Heap(List<int> data, HeapType heapType)
         {
+            var cloneData = new List<int>();
+            foreach (var item in data)
+            {
+                cloneData.Add(item);
+            }
             switch (heapType)
             {
                 case HeapType.Max:
-                    data = Heapify.GetMaxHeap(data);
                     ReHeapify = new HeapMethod(Heapify.GetMaxHeap);
                     break;
                 case HeapType.Min:
-                    data = Heapify.GetMinHeap(data);
                     ReHeapify = new HeapMethod(Heapify.GetMinHeap);
                     break;
                 default:
                     break;
             }
-            Data = data;
+            Data = ReHeapify(cloneData);
             Tree = BinaryTree<int>.CreateBinaryTree(Data);
             HeapType = heapType;
         }
@@ -235,25 +239,41 @@ namespace ch3_queue_and_stack
         public Node<int> Insert(int item)
         {
             Data.Add(item);
-            var heapedResult = ReHeapify(Data);
+            var reheapedResult = ReHeapify(Data);
             // reheap list after add a new object
-            Data = heapedResult;
-            // get reheaped binaryTree
+            Data = reheapedResult;
+            // create node from current tree
             Tree = BinaryTree<int>.CreateBinaryTree(Data);
             return Tree;
         }
 
-        //public Node<int> Delete(int item)
-        //{
-        //    Data.Add(item);
-        //    var heapedResult = ReHeapify(Data);
-        //    // reheap list after add a new object
-        //    Data = heapedResult;
-        //    // get reheaped binaryTree
-        //    Tree = BinaryTree<int>.CreateBinaryTree(Data);
-        //    return Tree;
-        //}
+        public Node<int> Delete(int item)
+        {
+            if (!Data.Contains(item))
+            {
+                throw new Exception($"{item} didn't exist");
+            }
+            Data.Remove(item);
+            var reheapedResult = ReHeapify(Data);
+            Data = reheapedResult;
+            Tree = BinaryTree<int>.CreateBinaryTree(Data);
+            return Tree;
+        }
 
+        public int Peek()
+        {
+            return Data.First();
+        }
 
+        public int extract()
+        {
+            if (Data.Count <= 0)
+            {
+                return int.MinValue;
+            }
+            var removeValue = Data.First();
+            Data.Remove(removeValue);
+            return removeValue;
+        }
     }
 }

@@ -27,15 +27,17 @@ namespace ch3_queue_and_stack
             #region covert collection to complete binaryTree
             var arrayList = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
             var trees = BinaryTree<int>.CreateBinaryTree(arrayList);
-            BinaryTree<int>.PrintTreeNodes(trees);
+            //BinaryTree<int>.PrintTreeNodes(trees);
             #endregion
 
             #region heapify to max-heap
             var datas = new List<int>() { 1, 5, 8, 3, 4, 5, 6, 7 };
-            var maxHeap = new Heap(datas,HeapType.Max);
+            var maxHeap = new Heap(datas, HeapType.Max);
             var minHeap = new Heap(datas,HeapType.Min);
             BinaryTree<int>.PrintTreeNodes(maxHeap.Tree);
-            BinaryTree<int>.PrintTreeNodes(minHeap.Tree);
+            maxHeap.Insert(2);
+            maxHeap.Delete(5);
+            var min = minHeap.Peek();
             #endregion
         }
     }
