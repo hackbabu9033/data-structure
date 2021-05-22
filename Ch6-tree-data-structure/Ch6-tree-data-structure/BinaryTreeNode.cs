@@ -6,6 +6,21 @@ namespace Ch6_tree_data_structure
 {
     public class BinaryTreeNode<T>
     {
+        private static int Id = 0;
+
+        private static int NextId
+        {
+            get
+            {
+                return Id++;
+            }
+        }
+        public BinaryTreeNode()
+        {
+            NodeId = NextId;
+        }
+
+        public int NodeId { get; set; }
         public T Data { get; set; }
 
         /// <summary>
@@ -36,7 +51,7 @@ namespace Ch6_tree_data_structure
             if (node != null)
             {
                 InOrderTravel(node.Llink);
-                Console.WriteLine($"{node.Data}");
+                Console.WriteLine($"node value : {node.Data}, nodeId : {node.NodeId}");
                 InOrderTravel(node.Rlink);
             }
         }

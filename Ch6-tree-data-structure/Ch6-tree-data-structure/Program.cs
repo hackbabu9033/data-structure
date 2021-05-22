@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using ch6_tree;
+using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Text;
@@ -12,8 +13,8 @@ namespace Ch6_tree_data_structure
             var jsonPath = Path.Combine(Environment.CurrentDirectory, @"TreeNodeData\\intTreeNode.json");
             var json = File.ReadAllText(jsonPath, Encoding.UTF8);
             var treeNode = JsonConvert.DeserializeObject<BinaryTreeNode<int>>(json);
-            BinaryTreeNode<int>.PostOrderTravel(treeNode);
-            //BinaryTreeNode<int>.InOrderTravelNoRecursive(treeNode);
+            //BinaryTreeNode<int>.InOrderTravel(treeNode);
+            var threadBinTreeNode = ThreadBinaryTree<int>.ConvertToThreadBinTree(treeNode);
         }
     }
 }
