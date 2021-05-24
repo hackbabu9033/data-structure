@@ -136,6 +136,16 @@ namespace Ch6_tree_data_structure
                 }
             }
         }
+
+        public static void GetInOrdertList(BinaryTreeNode<T> tree, List<BinaryTreeNode<T>> result)
+        {
+            if (tree != null)
+            {
+                GetInOrdertList(tree.Llink, result);
+                result.Add(tree);
+                GetInOrdertList(tree.Rlink, result);
+            }
+        }
     }
 
 }

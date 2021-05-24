@@ -13,7 +13,6 @@ namespace Ch6_tree_data_structure
             var jsonPath = Path.Combine(Environment.CurrentDirectory, @"TreeNodeData\\intTreeNode.json");
             var json = File.ReadAllText(jsonPath, Encoding.UTF8);
             var treeNode = JsonConvert.DeserializeObject<BinaryTreeNode<int>>(json);
-            //BinaryTreeNode<int>.InOrderTravel(treeNode);
             var threadBinTreeNode = ThreadBinaryTree<int>.ConvertToThreadBinTree(treeNode);
         }
     }
