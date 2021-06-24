@@ -5,7 +5,7 @@ using System.IO;
 
 namespace ch6_tree
 {
-    public static class JsonHelper
+    public static class FileReadHepler
     {
         public static string GetJsonFileContent(string fileName)
         {

@@ -17,4 +17,19 @@
     <ProjectReference Include="..\Ch6-tree-data-structure\Ch6-tree-data-structure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Excecpation\DeleteNodeFromTree_NodeHasRightChildNode.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Excecpation\DeleteNodeFromTree_NodeHasTwoChildNodes.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Stub\DeleteNodeFromTree_NodeHasRightChildNode_InputData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Stub\DeleteNodeFromTree_NodeHasTwoChildNodes_input.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

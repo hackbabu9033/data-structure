@@ -7,13 +7,12 @@ namespace data_structure_test.Helper
 {
     public static class FileReadHepler
     {
-        public static string GetFileContent(string fileName)
+        public static string GetFileContent(string filePath)
         {
-            var filePath = Environment.CurrentDirectory + $@"\MockData\{fileName}";
             var result = string.Empty;
             if (File.Exists(filePath))
             {
-                result = File.ReadAllText(filePath, Encoding.UTF8);
+                result = File.ReadAllText(Environment.CurrentDirectory + $@"\{filePath}", Encoding.UTF8);
             }
             return result;
         }

@@ -1,0 +1,24 @@
+{
+  "Data": 15,
+  "Llink": {
+    "Data": 5,
+    "Llink": {
+      "Data": 10
+    },
+    "Rlink": {
+      "Data": 13
+    }
+  },
+  "Rlink": {
+    "Data": 17,
+    "Llink": {
+      "Data": 14
+    },
+    "Rlink": {
+      "Data": 15,
+      "Rlink": {
+        "Data": 18
+      }
+    }
+  }
+}

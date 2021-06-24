@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Ch6_tree_data_structure
 {
-    public class BinaryTreeNode<T>
+    public class BinaryTreeNode<T> where T:IComparable<T>
     {
         private static int Id = 0;
 
