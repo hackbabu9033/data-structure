@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ch6-tree-data-structure", "Ch6-tree-data-structure\Ch6-tree-data-structure.csproj", "{604066A1-A160-4518-9AA8-3868106ED47F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "data-structure-test", "data-structure-test\data-structure-test.csproj", "{62B4AE82-42D0-4438-89E1-2A4C09A95DEF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "data-structure-test", "data-structure-test\data-structure-test.csproj", "{62B4AE82-42D0-4438-89E1-2A4C09A95DEF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
