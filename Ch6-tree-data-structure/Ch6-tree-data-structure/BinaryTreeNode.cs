@@ -146,6 +146,8 @@ namespace Ch6_tree_data_structure
                 GetInOrdertList(tree.Rlink, result);
             }
         }
+
+        
     }
 
 }
