@@ -1,5 +1,5 @@
 ﻿using ch6_tree;
-using Ch6_tree_data_structure;
+using Ch6_Ch7_tree_data_structure;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using FluentAssertions;

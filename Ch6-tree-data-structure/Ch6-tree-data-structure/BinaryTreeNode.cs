@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ch6_tree_data_structure
+namespace Ch6_Ch7_tree_data_structure
 {
     public class BinaryTreeNode<T> where T:IComparable<T>
     {

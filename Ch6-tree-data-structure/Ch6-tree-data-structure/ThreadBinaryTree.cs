@@ -1,4 +1,4 @@
-﻿using Ch6_tree_data_structure;
+﻿using Ch6_Ch7_tree_data_structure;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -50,7 +50,6 @@ namespace ch6_tree
             NodeId = NextId;
         }
 
-
         public static ThreadBinaryTree<T> ConvertToThreadBinTree(BinaryTreeNode<T> tree)
         {
             var stack = new Stack<BinaryTreeNode<T>>();
@@ -89,22 +88,6 @@ namespace ch6_tree
             BindingThreadNodes(headNode, ThreadBinaryTree, inorderTreeList);
 
             return ThreadBinaryTree;
-        }
-
-        public static void InsertLeftNode(ThreadBinaryTree<T> nodeParent, ThreadBinaryTree<T> insertNode)
-        {
-            insertNode.LBit = nodeParent.LBit;
-            insertNode.Llink = nodeParent.Llink;
-            insertNode.RBit = false;
-            insertNode.Rlink = nodeParent;
-
-            nodeParent.LBit = true;
-            nodeParent.Llink = insertNode;
-            // 若是非引線的reference，
-            if (insertNode.LBit)
-            {
-
-            }
         }
 
         public static ThreadBinaryTree<T> InorderSuccessor(ThreadBinaryTree<T> node)

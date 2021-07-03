@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Ch6_tree_data_structure.Helper
+namespace Ch6_Ch7_tree_data_structure.Helper
 {
     public static class NodeTreeJsonFileReader
     {

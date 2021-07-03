@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Ch6-tree-data-structure\Ch6-tree-data-structure.csproj" />
+    <ProjectReference Include="..\Ch6-tree-data-structure\Ch6-Ch7-tree-data-structure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

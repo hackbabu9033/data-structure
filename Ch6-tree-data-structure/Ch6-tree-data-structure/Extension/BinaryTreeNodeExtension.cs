@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ch6_tree_data_structure.Extension
+namespace Ch6_Ch7_tree_data_structure.Extension
 {
     public static class BinaryTreeNodeExtension
     {
