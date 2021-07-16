@@ -6,9 +6,9 @@ namespace Ch6_Ch7_tree_data_structure
 {
     public class BinaryTreeNode<T> where T:IComparable<T>
     {
-        private static int Id = 0;
+        protected static int Id = 0;
 
-        private static int NextId
+        protected static int NextId
         {
             get
             {

@@ -11,11 +11,15 @@ namespace ch6_tree
         {
             var filePath = Environment.CurrentDirectory + $@"\TreeNodeData\{fileName}";
             var result = string.Empty;
+            
+
             if (File.Exists(filePath))
             {
                 result = File.ReadAllText(filePath, Encoding.UTF8);
             }
+
             return result;
+
         }
     }
 }
