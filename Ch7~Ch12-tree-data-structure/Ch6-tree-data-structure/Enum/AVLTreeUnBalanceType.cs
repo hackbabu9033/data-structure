@@ -6,6 +6,9 @@ namespace Ch6_tree_data_structure.Enum
 {
     public enum AVLTreeUnBalanceType
     {
-        LL = 2
+        LL,
+        LR,
+        RR,
+        RL
     }
 }
