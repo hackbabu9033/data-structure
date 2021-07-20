@@ -31,35 +31,85 @@ namespace Ch6_tree_data_structure
             AVLTree<T> pivot;
             AVLTree<T> parent;
             AVLTree<T> rotatedTree;
-            var root = this;
-            root.AddTreeNode(data);
-            var unbalanceType = GetUnbalanceTreeTypeAfterInsert(root, data);
+            AVLTree<T> reBalanceTree = null;
+            //先以正常的tree加入方式加入節點
+            this.AddTreeNode(data);
+
+            // 加入完後若有不平衡狀況出現再重新平衡
+            var unbalanceNode = GetDeepestUnbalanceNode(this);
+            if (unbalanceNode == null)
+            {
+                return this;
+            }
+            var unbalanceType = GetUnbalanceTreeType(unbalanceNode.Node);
+            var root = unbalanceNode.Node;
             if (!unbalanceType.HasValue)
             {
-                return root;
+                return this;
             }
             switch (unbalanceType)
             {
+                // note：因為無論哪種情況的rotation都會導致根節點改變
+                // 因此回傳新的樹
                 case AVLTreeUnBalanceType.LL:
                     pivot = root.Left;
-                    return RightRotation(root, pivot);
+                    reBalanceTree = RightRotation(root, pivot);
+                    break;
                 case AVLTreeUnBalanceType.LR:
                     parent = root.Left;
                     pivot = parent.Right;
                     rotatedTree = LeftRotation(root, pivot);
                     root.Left = rotatedTree;
-                    return RightRotation(root, rotatedTree);
+                    reBalanceTree = RightRotation(root, rotatedTree);
+                    break;
                 case AVLTreeUnBalanceType.RR:
                     pivot = root.Right;
-                    return LeftRotation(root, pivot);
+                    reBalanceTree = LeftRotation(root, pivot);
+                    break;
                 case AVLTreeUnBalanceType.RL:
                     parent = root.Right;
                     pivot = parent.Left;
                     rotatedTree = RightRotation(parent, pivot);
-                    return LeftRotation(rotatedTree, rotatedTree.Right);
+                    reBalanceTree = LeftRotation(rotatedTree, rotatedTree.Right);
+                    break;
             }
-            return root;
 
+            // 如果取得最深非平衡節點的parent是null代表是整個樹有動
+            // 直接回傳平衡完的結果
+            if (unbalanceNode.Parent == null)
+            {
+                return reBalanceTree;
+            }
+
+            // 若最深非平衡節點有parent
+            // 找出哪一個節點的子節點是最深的非平衡節點
+            // 將它的子節點用旋轉平衡完的樹reassign給它
+            if (unbalanceNode.Parent == root.Left)
+            {
+                var queue = new Queue<AVLTree<T>>();
+                queue.Enqueue(this);
+                while (queue.Count > 0)
+                {
+                    var node = queue.Dequeue();
+                    if (node.Left == unbalanceNode.Node)
+                    {
+                        node.Left = reBalanceTree;
+                    }
+                    if (node.Right == unbalanceNode.Node)
+                    {
+                        node.Right = reBalanceTree;
+                    }
+                    if (node.Left == null)
+                    {
+                        queue.Enqueue(node.Left);
+                    }
+                    if (node.Right == null)
+                    {
+                        queue.Enqueue(node.Right);
+                    }
+                }
+            }
+            return this;
         }
 
 
@@ -88,11 +138,60 @@ namespace Ch6_tree_data_structure
             return parent;
         }
 
-        public AVLTreeUnBalanceType? GetUnbalanceTreeTypeAfterInsert(AVLTree<T> rootNode, T data)
+        public TreeNodeTrack<T> GetDeepestUnbalanceNode(AVLTree<T> root)
         {
-            var rootBalanceFactor = CaculateNodebalanceFactor(rootNode);
-            var leftNodeBalanceFactor = CaculateNodebalanceFactor(rootNode.Left);
-            var rightNodeBalanceFactor = CaculateNodebalanceFactor(rootNode.Right);
+            AVLTree<T> deepestUnbalanceNode = null;
+            AVLTree<T> parent = null;
+            //var queue = new Queue<AVLTree<T>>();
+            var queue = new Queue<TreeNodeTrack<T>>();
+            //queue.Enqueue(root);
+            queue.Enqueue(new TreeNodeTrack<T>() { Parent = null, Node = root });
+            // 用廣度優先，深度由上往下搜尋
+            // 確保找到的平衡因子會是比最深的那個
+            while (queue.Count > 0)
+            {
+                var track = queue.Dequeue();
+                var nodeBalanceFactor = CaculateNodebalanceFactor(track.Node);
+                if (Math.Abs(nodeBalanceFactor) > 1)
+                {
+                    deepestUnbalanceNode = track.Node;
+                    parent = track.Parent;
+                }
+                if (track.Node.Left != null)
+                {
+                    queue.Enqueue(new TreeNodeTrack<T>() { Parent = track.Node,Node = track.Node.Left });
+                }
+                if (track.Node.Right != null)
+                {
+                    queue.Enqueue(new TreeNodeTrack<T>() { Parent = track.Node, Node = track.Node.Right });
+                }
+            }
+
+            if (deepestUnbalanceNode == null)
+            {
+                return null;
+            }
+
+            return new TreeNodeTrack<T>
+            {
+                Parent = parent,
+                Node = deepestUnbalanceNode
+            };
+
+        }
+
+        /// <summary>
+        /// 計算該節點的balance refactor
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        public AVLTreeUnBalanceType? GetUnbalanceTreeType(AVLTree<T> node)
+        {
+            if (node == null) return null;
+
+            var rootBalanceFactor = CaculateNodebalanceFactor(node);
+            var leftNodeBalanceFactor = CaculateNodebalanceFactor(node.Left);
+            var rightNodeBalanceFactor = CaculateNodebalanceFactor(node.Right);
 
             if (rootBalanceFactor == 2)
             {
@@ -150,11 +249,10 @@ namespace Ch6_tree_data_structure
         }
     }
 
-    public class RotationContent<T> where T : IComparable<T>
+    public class TreeNodeTrack<T> where T : IComparable<T>
     {
-        public AVLTreeUnBalanceType? UnbalanceType { get; set; }
-        public AVLTree<T> Pivot { get; set; }
+        public AVLTree<T> Node { get; set; }
+        public AVLTree<T> Parent { get; set; }
 
-        public AVLTree<T> Root { get; set; }
     }
 }

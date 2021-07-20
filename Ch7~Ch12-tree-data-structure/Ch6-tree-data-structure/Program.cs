@@ -43,6 +43,7 @@ namespace Ch6_Ch7_tree_data_structure
             avlTree = avlTree.Insert(15);
             avlTree = avlTree.Insert(90);
             avlTree = avlTree.Insert(12);
+            avlTree = avlTree.Insert(9);
 
         }
     }
