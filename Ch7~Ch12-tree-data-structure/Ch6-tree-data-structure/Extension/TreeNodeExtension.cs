@@ -1,5 +1,6 @@
 ﻿using Ch6_tree_data_structure;
 using System;
+using System.Collections.Generic;
 
 namespace Ch6_Ch7_tree_data_structure.Extension
 {
@@ -71,47 +72,6 @@ namespace Ch6_Ch7_tree_data_structure.Extension
             else
             {
                 preNode.Llink = newAddNode;
-            }
-        }
-
-        public static void AddTreeNode<T>(this AVLTree<T> avlTree, T data) where T : IComparable<T>
-        {
-            if (avlTree == null)
-            {
-                avlTree.Data = data;
-                return;
-            }
-            var curNode = avlTree;
-            AVLTree<T> preNode = null;
-            while (curNode != null)
-            {
-                var compareResult = data.CompareTo(curNode.Data);
-                preNode = curNode;
-                if (compareResult == 0)
-                {
-                    throw new ArgumentException("input data has already in this tree");
-                }
-                else if (compareResult < 0)
-                {
-                    curNode = curNode.Left;
-                }
-                else
-                {
-                    curNode = curNode.Right;
-                }
-            }
-
-            var newAddNode = new AVLTree<T>()
-            {
-                Data = data
-            };
-            if (data.CompareTo(preNode.Data) > 0)
-            {
-                preNode.Right = newAddNode;
-            }
-            else
-            {
-                preNode.Left = newAddNode;
             }
         }
     }

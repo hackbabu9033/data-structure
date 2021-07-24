@@ -1,6 +1,9 @@
 ﻿using Ch6_Ch7_tree_data_structure;
 using Ch6_Ch7_tree_data_structure.Extension;
+using Ch6_tree_data_structure.AVLTreeBalance;
 using Ch6_tree_data_structure.Enum;
+using Ch6_tree_data_structure.Extension;
+using Ch6_tree_data_structure.Interface;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,6 +12,15 @@ namespace Ch6_tree_data_structure
 {
     public class AVLTree<T> where T: IComparable<T>
     {
+        private static Dictionary<AVLTreeUnBalanceType, IAVLTreeBalancer<T>> _AVLTreeBalanceLogic =
+            new Dictionary<AVLTreeUnBalanceType, IAVLTreeBalancer<T>>()
+            {
+                {AVLTreeUnBalanceType.LL,new LLTreeBalance<T>()},
+                {AVLTreeUnBalanceType.RR,new RRTreeBalance<T>()},
+                {AVLTreeUnBalanceType.LR,new LRTreeBalance<T>()},
+                {AVLTreeUnBalanceType.RL,new RLTreeBalance<T>()}
+            };
+
         public AVLTree():base()
         {
            
@@ -28,114 +40,133 @@ namespace Ch6_tree_data_structure
 
         public AVLTree<T> Insert(T data)
         {
-            AVLTree<T> pivot;
-            AVLTree<T> parent;
-            AVLTree<T> rotatedTree;
             AVLTree<T> reBalanceTree = null;
             //先以正常的tree加入方式加入節點
             this.AddTreeNode(data);
 
             // 加入完後若有不平衡狀況出現再重新平衡
-            var unbalanceNode = GetDeepestUnbalanceNode(this);
+            return GetReBalanceTree(this);
+            //var unbalanceNode = GetDeepestUnbalanceNode(this);
+            //if (unbalanceNode == null)
+            //{
+            //    return this;
+            //}
+            //var unbalanceType = GetUnbalanceTreeType(unbalanceNode.Node);
+            //var root = unbalanceNode.Node;
+            //if (!unbalanceType.HasValue)
+            //{
+            //    return this;
+            //}
+            //if (unbalanceType.HasValue)
+            //{
+            //    _AVLTreeBalanceLogic.TryGetValue(unbalanceType.Value, out IAVLTreeBalancer<T> balanceLogic);
+            //    reBalanceTree = balanceLogic.BalanceALVTree(root);
+            //}
+
+            //// 如果取得最深非平衡節點的parent是null代表是整個樹有動
+            //// 直接回傳平衡完的結果
+            //if (unbalanceNode?.Parent == null)
+            //{
+            //    return reBalanceTree;
+            //}
+            //else
+            //{
+            //    // 若最深非平衡節點有parent
+            //    // 找出哪一個節點的子節點是最深的非平衡節點
+            //    // 將它的子節點用旋轉平衡完的樹reassign給它
+            //    var queue = new Queue<AVLTree<T>>();
+            //    queue.Enqueue(this);
+            //    while (queue.Count > 0)
+            //    {
+            //        var node = queue.Dequeue();
+            //        if (node.Left == unbalanceNode.Node)
+            //        {
+            //            node.Left = reBalanceTree;
+            //        }
+            //        if (node.Right == unbalanceNode.Node)
+            //        {
+            //            node.Right = reBalanceTree;
+            //        }
+            //        if (node.Left == null)
+            //        {
+            //            queue.Enqueue(node.Left);
+            //        }
+            //        if (node.Right == null)
+            //        {
+            //            queue.Enqueue(node.Right);
+            //        }
+            //    }
+            //}
+
+            //return this;
+        }
+
+        private AVLTree<T> GetReBalanceTree(AVLTree<T> tree)
+        {
+            AVLTree<T> reBalanceTree = null;
+
+            // 加入完後若有不平衡狀況出現再重新平衡
+            var unbalanceNode = GetDeepestUnbalanceNode(tree);
             if (unbalanceNode == null)
             {
-                return this;
+                return tree;
             }
             var unbalanceType = GetUnbalanceTreeType(unbalanceNode.Node);
             var root = unbalanceNode.Node;
             if (!unbalanceType.HasValue)
             {
-                return this;
+                return tree;
             }
-            switch (unbalanceType)
+            if (unbalanceType.HasValue)
             {
-                // note：因為無論哪種情況的rotation都會導致根節點改變
-                // 因此回傳新的樹
-                case AVLTreeUnBalanceType.LL:
-                    pivot = root.Left;
-                    reBalanceTree = RightRotation(root, pivot);
-                    break;
-                case AVLTreeUnBalanceType.LR:
-                    parent = root.Left;
-                    pivot = parent.Right;
-                    rotatedTree = LeftRotation(root, pivot);
-                    root.Left = rotatedTree;
-                    reBalanceTree = RightRotation(root, rotatedTree);
-                    break;
-                case AVLTreeUnBalanceType.RR:
-                    pivot = root.Right;
-                    reBalanceTree = LeftRotation(root, pivot);
-                    break;
-                case AVLTreeUnBalanceType.RL:
-                    parent = root.Right;
-                    pivot = parent.Left;
-                    rotatedTree = RightRotation(parent, pivot);
-                    reBalanceTree = LeftRotation(rotatedTree, rotatedTree.Right);
-                    break;
+                _AVLTreeBalanceLogic.TryGetValue(unbalanceType.Value, out IAVLTreeBalancer<T> balanceLogic);
+                reBalanceTree = balanceLogic.BalanceALVTree(root);
             }
 
             // 如果取得最深非平衡節點的parent是null代表是整個樹有動
             // 直接回傳平衡完的結果
-            if (unbalanceNode.Parent == null)
+            if (unbalanceNode?.Parent == null)
             {
                 return reBalanceTree;
             }
-
-            // 若最深非平衡節點有parent
-            // 找出哪一個節點的子節點是最深的非平衡節點
-            // 將它的子節點用旋轉平衡完的樹reassign給它
-            if (unbalanceNode.Parent == root.Left)
+            else
             {
+                // 若最深非平衡節點有parent
+                // 找出哪一個節點的子節點是最深的非平衡節點
+                // 將它的子節點用旋轉平衡完的樹reassign給它
                 var queue = new Queue<AVLTree<T>>();
-                queue.Enqueue(this);
+                queue.Enqueue(tree);
                 while (queue.Count > 0)
                 {
                     var node = queue.Dequeue();
-                    if (node.Left == unbalanceNode.Node)
+                    if (node.Left != null)
                     {
-                        node.Left = reBalanceTree;
-                    }
-                    if (node.Right == unbalanceNode.Node)
-                    {
-                        node.Right = reBalanceTree;
-                    }
-                    if (node.Left == null)
-                    {
+                        if (node.Left.Data.CompareTo(unbalanceNode.Node.Data) == 0)
+                        {
+                            node.Left = reBalanceTree;
+                            break;
+                        }
                         queue.Enqueue(node.Left);
                     }
-                    if (node.Right == null)
+                    if (node.Right != null)
                     {
+                        if (node.Right.Data.CompareTo(unbalanceNode.Node.Data) == 0)
+                        {
+                            node.Right = reBalanceTree;
+                            break;
+                        }
                         queue.Enqueue(node.Right);
                     }
                 }
             }
-            return this;
+
+            return tree;
         }
 
-
-        private AVLTree<T> RightRotation(AVLTree<T> parent, AVLTree<T> pivot)
+        public AVLTree<T> Delete(T data)
         {
-            var pivotRightSubTree = pivot.Right;
-            var pivotLeftSubTree = pivot.Left;
-            var orgParentNode = parent;
-            parent = pivot;
-            parent.Left = pivotLeftSubTree;
-            parent.Right = orgParentNode;
-            parent.Right.Left = pivotRightSubTree;
-            return parent;
-        }
-
-        private AVLTree<T> LeftRotation(AVLTree<T> parent, AVLTree<T> pivot)
-        {
-            var pivotRightSubTree = pivot.Right;
-            var pivotLeftSubTree = pivot.Left;
-            var orgParentNode = parent;
-            parent = pivot;
-            parent.Right = pivotRightSubTree;
-            parent.Left = orgParentNode;
-            parent.Left.Right = pivotLeftSubTree;
-
-            return parent;
+            this.DeleteTreeNode(data);
+            return GetReBalanceTree(this);
         }
 
         public TreeNodeTrack<T> GetDeepestUnbalanceNode(AVLTree<T> root)
@@ -253,6 +284,14 @@ namespace Ch6_tree_data_structure
     {
         public AVLTree<T> Node { get; set; }
         public AVLTree<T> Parent { get; set; }
+    }
 
+    public class RebalanceTreeResult<T> where T: IComparable<T>
+    {
+        /// <summary>
+        /// 被平衡的root
+        /// </summary>
+        public AVLTree<T> BalancedRootNode { get; set; }
+        public AVLTree<T> ReBalancedTree { get; set; }
     }
 }

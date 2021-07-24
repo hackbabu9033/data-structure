@@ -38,13 +38,25 @@ namespace Ch6_Ch7_tree_data_structure
             //maxHeap.InsertNode(95);
 
             var avlTree = new AVLTree<int>();
-            avlTree.Data = 80;
-            avlTree = avlTree.Insert(20);
-            avlTree = avlTree.Insert(15);
-            avlTree = avlTree.Insert(90);
-            avlTree = avlTree.Insert(12);
-            avlTree = avlTree.Insert(9);
-
+            avlTree.Data = 300;
+            avlTree = avlTree.Insert(400);
+            avlTree = avlTree.Insert(500);
+            avlTree = avlTree.Insert(200);
+            avlTree = avlTree.Insert(100);
+            // LL rebalance above
+            avlTree = avlTree.Insert(250);
+            // LR rebalance above
+            avlTree = avlTree.Insert(225);
+            avlTree = avlTree.Insert(275);
+            avlTree = avlTree.Insert(240);
+            // RL rebalance above
+            avlTree = avlTree.Insert(290);
+            // LR rebalance above
+            avlTree = avlTree.Insert(600);
+            avlTree = avlTree.Insert(700);
+            avlTree = avlTree.Delete(275);
+            // RR rebalance above
+            avlTree = avlTree.Delete(500);
         }
     }
 }
