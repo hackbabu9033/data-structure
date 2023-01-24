@@ -31,5 +31,27 @@ namespace SortingAndSearch
             }
             return sortedList[middle] == search ? middle : -1;
         }
+
+        public static int FindInsertIndexForSortedList(List<int> sortedList, int insertValue)
+        {
+            int left, right, middle, value;
+            left = 0;
+            middle = 0;
+            right = sortedList.Count - 1;
+            while (right >= left)
+            {
+                middle = (left + right) / 2;
+                value = sortedList[middle];
+                if (insertValue > value)
+                {
+                    left = middle + 1;
+                }
+                else
+                {
+                    right = middle - 1;
+                }
+            }
+            return (left + right -1 ) / 2;
+        }
     }
 }
